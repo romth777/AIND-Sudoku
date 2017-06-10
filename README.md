@@ -21,7 +21,10 @@ A: In order to solve the problem of naked twins, I built the following algorithm
                 indexes = [unit[i] for i, x in enumerate(v_unit) if x == v_box]
 
                 # We judge from the length of the value whether naked twin constraints can be applied.
-                if len(indexes) > 1 and len(indexes) >= len(v_box):
+                # check if there are indexes which same number of units,
+                # and check if the number of same value indexes is bigger than length of its value
+                # and check if the value is not 1 length
+                if len(indexes) > 1 and len(indexes) >= len(v_box) and len(v_box) > 1:
                     # for all box in unit
                     for box in unit:
                         # if the box is already known as the twins, then continue
@@ -29,21 +32,16 @@ A: In order to solve the problem of naked twins, I built the following algorithm
                             continue
                         # if not
                         else:
-                            # if the length is 1, then the box doesn't need to eliminate
-                            if len(values[box]) == 1:
-                                continue
-                            # if not, check each value in box to be able to eliminate
-                            else:
-                                # for all value in the box, replace value in box to null when the box has the value
-                                for str in v_box:
-                                    values[box] = values[box].replace(str, "")
+                            # for all value in the box, replace value in box to null when the box has the value
+                            for str in v_box:
+                                values[box] = values[box].replace(str, "")
 
 
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
 A: I added diagonal units to solve the diagonal sudoku problem.
-Then I solved this problem in the same way as solving a simple sudoku problem.
+Then I solved this problem in the same way as solving a simple sudoku problem.  
 Specifically, we first applied eliminate, picked out an impossible value from units already given values, and removed it from the box's options that have not yet been decided.
 Next, only_choice was applied, and the place where the value was determined among each unit was filled with that value.
 Finally, applying naked_twins to select a numerical value that can eliminate the value of other boxes, the value is not uniquely determined, and the value was excluded from the choices of other boxes.
