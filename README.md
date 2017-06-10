@@ -3,11 +3,51 @@
 
 # Question 1 (Naked Twins)
 Q: How do we use constraint propagation to solve the naked twins problem?  
-A: *Student should provide answer here*
+A: In order to solve the problem of naked twins, I built the following algorithm.
+
+    # for all values
+    for value in values:
+        # for all units which typical value belong to
+        for unit in units[value]:
+            # for all boxes which typical unit of typical value belong to
+            for box in unit:
+                # To get the value of typical box
+                v_box = values[box]
+
+                # To get the values of typical unit which the box belong to
+                v_unit = [values[box] for box in unit]
+
+                # To get the boxes which is the same as the typical box
+                indexes = [unit[i] for i, x in enumerate(v_unit) if x == v_box]
+
+                # We judge from the length of the value whether naked twin constraints can be applied.
+                if len(indexes) > 1 and len(indexes) >= len(v_box):
+                    # for all box in unit
+                    for box in unit:
+                        # if the box is already known as the twins, then continue
+                        if box in indexes:
+                            continue
+                        # if not
+                        else:
+                            # if the length is 1, then the box doesn't need to eliminate
+                            if len(values[box]) == 1:
+                                continue
+                            # if not, check each value in box to be able to eliminate
+                            else:
+                                # for all value in the box, replace value in box to null when the box has the value
+                                for str in v_box:
+                                    values[box] = values[box].replace(str, "")
+
+
 
 # Question 2 (Diagonal Sudoku)
 Q: How do we use constraint propagation to solve the diagonal sudoku problem?  
-A: *Student should provide answer here*
+A: I added diagonal units to solve the diagonal sudoku problem.
+Then I solved this problem in the same way as solving a simple sudoku problem.
+Specifically, we first applied eliminate, picked out an impossible value from units already given values, and removed it from the box's options that have not yet been decided.
+Next, only_choice was applied, and the place where the value was determined among each unit was filled with that value.
+Finally, applying naked_twins to select a numerical value that can eliminate the value of other boxes, the value is not uniquely determined, and the value was excluded from the choices of other boxes.
+In diagonal sudoku, after adding diagonal units, we solved the problem using this algorithm.
 
 ### Install
 
